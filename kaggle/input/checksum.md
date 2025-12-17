@@ -1,0 +1,7 @@
+be1939682883d9bd705e75ece10aab68  arc-agi_concept-challenges.json
+ce2e534c75a4cb65275cf9e228fec030  arc-agi_concept-solutions.json
+0f8340734d56a5e3763048bbc646a1e2  arc-agi_evaluation-challenges.json
+73457bcd8027b9696b37fe826493f129  arc-agi_evaluation-solutions.json
+1eae6cd24421e81afc935af8df117ea1  arc-agi_training-challenges.json
+b817c51116ace41eae6e7d579a12a6fd  arc-agi_training-solutions.json
+8f58662513e737cf60321bbcb88c2247  sample_submission.json
