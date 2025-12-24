@@ -752,27 +752,28 @@ def evaluate(
     return reduced_metrics
 
 
-def save_code_and_config(config: PretrainConfig):
-    if config.checkpoint_path is None or wandb.run is None:
-        return
+def save_code_and_config(config: PretrainConfig, save_dir: str):
+    import os, json
+    import yaml
 
-    os.makedirs(config.checkpoint_path, exist_ok=True)
+    cfg_path = os.path.join(save_dir, "config.yaml")
+    json_path = os.path.join(save_dir, "config.json")
 
-    # Copy code
-    code_list = [get_model_source_path(config.arch.name), get_model_source_path(config.arch.loss.name)]
-    for code_file in code_list:
-        if code_file is not None:
-            code_name = os.path.basename(code_file)
+    config_dict = json.loads(config.model_dump_json())
 
-            shutil.copy(code_file, os.path.join(config.checkpoint_path, code_name))
+    try:
+        with open(cfg_path, "w", encoding="utf-8") as f:
+            yaml.safe_dump(config_dict, f, sort_keys=False, allow_unicode=True)
 
-    # Dump config as yaml
-    config_file = os.path.join(config.checkpoint_path, "all_config.yaml")
-    with open(config_file, "wt") as f:
-        yaml.dump(config.model_dump(), f)
+    except Exception as e:
+        with open(json_path, "w", encoding="utf-8") as f:
+            json.dump(config_dict, f, ensure_ascii=False, indent=2)
 
-    # Log code
-    wandb.run.log_code(config.checkpoint_path)
+        with open(cfg_path, "w", encoding="utf-8") as f:
+            f.write(
+                "# Failed to write config as YAML, wrote config.json instead.\n"
+                f"# Error: {type(e).__name__}: {e}\n"
+            )
 
 
 def _get_loop_config(model: nn.Module):
